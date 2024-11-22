@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Forecast Checker</title>
+</head>
+<body>
+  <h1>Check the Weather</h1>
+  <form id="weatherForm">
+    <label for="location">Enter City or ZIP Code:</label>
+    <input type="text" id="location" name="location" required>
+    <button type="submit">Get Forecast</button>
+  </form>
+  <p id="result"></p>
+
+  <script>
+    document.getElementById("weatherForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const location = document.getElementById("location").value;
+
+      try {
+        const response = await fetch("/api/get_weather", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ location: location })
+        });
+        const result = await response.json();
+        document.getElementById("result").textContent = result.message;
+      } catch (error) {
+        document.getElementById("result").textContent = "Error fetching weather data. Please try again.";
+      }
+    });
+  </script>
+</body>
+</html>
